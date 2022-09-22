@@ -233,7 +233,8 @@ class TestFollow(TestCase):
             'posts:profile_follow', kwargs={'username': self.user_following}))
         follow_cont = Follow.objects.count()
         self.follower_client.post(reverse(
-            'posts:profile_unfollow', kwargs={'username': self.user_following}))
+            'posts:profile_unfollow', kwargs={'username': self.user_following})
+        )
         follow_cont1 = Follow.objects.count()
         self.assertFalse(Follow.objects.filter(
             author=self.user_following, user=self.user_follower).exists())
@@ -295,7 +296,7 @@ class TestComment(TestCase):
         )
         comments_count = Comment.objects.count()
         text = 'Тестовый комментарий'
-        form_data ={
+        form_data = {
             'text': text,
         }
         response = self.authorized_client_author.post(

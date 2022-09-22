@@ -96,6 +96,7 @@ def post_edit(request, post_id):
                }
     return render(request, 'posts/post_create.html', context)
 
+
 @login_required
 def add_comment(request, post_id):
     # Получите пост
