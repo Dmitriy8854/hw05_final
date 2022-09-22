@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+
+  {% block content %}
+  {% include 'posts/includes/switcher.html' %}
+    <section>
+    
+        <h2>Посты авторов</h2>
+      
+      <div class="posts">
+      {% for post in page_obj %}
+         
+        <h1>Последние обновления на сайте</h1>
+         
+          {% include 'includes/article.html' %}
+        
+      {% endfor %}  
+      </div> 
+    </section>
+{% endblock content %}

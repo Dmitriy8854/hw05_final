@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}{{ title }}{% endblock title %}
+  {% block content %}
+  {% load cache %}
+  {% include 'posts/includes/switcher.html' %}
+    <section>
+    
+        <h2>Главная страница</h2>
+      {% cache 20 index %}
+      <div class="posts">
+      {% for post in page_obj %}
+         
+        <h1>Последние обновления на сайте</h1>
+         
+          {% include 'includes/article.html' %}
+        
+      {% endfor %}
+      {% endcache %} 
+      </div> 
+    </section>
+{% endblock content %}
