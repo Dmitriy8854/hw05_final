@@ -36,7 +36,7 @@ class Post(models.Model):
         upload_to='posts/',
         blank=True
     )
-    
+
     class Meta:
         ordering = ('-pub_date',)
         default_related_name = 'posts'
@@ -59,6 +59,7 @@ class Comment(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
 
+
 class Follow(models.Model):
     user = models.ForeignKey(
         User,
@@ -70,5 +71,3 @@ class Follow(models.Model):
         on_delete=models.CASCADE,
         related_name='following'
     )
-
-        

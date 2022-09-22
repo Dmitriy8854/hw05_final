@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from django.test import Client, TestCase
 from django.urls import reverse
-from posts.models import Group, Post, User, Comment
+from posts.models import Group, Post, User
 
 
 class PostTests(TestCase):
@@ -75,7 +75,7 @@ class PostTests(TestCase):
     def test_page_404(self):
         response = self.guest_client.get('/jff61/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
-  
+
 
 class TestComment(TestCase):
     @classmethod
@@ -86,13 +86,11 @@ class TestComment(TestCase):
             pub_date='31 июля 1854',
             author=cls.user_1,
             text='Тестовый текст',
-            
         )
-    
+
     def setUp(self):
         self.guest_client = Client()
         self.authorized_client = Client()
-
 
     def test_comment_guest_client(self):
         response = self.guest_client.get(reverse(

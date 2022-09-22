@@ -20,12 +20,13 @@ class PostForm(forms.ModelForm):
                 'Поле, текст обязателен для заполнения!')
         return data
 
+
 class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
         fields = ('text',)
-        labels = {'text': 'Текст поста',}
+        labels = {'text': 'Текст поста', }
 
     def clean_text(self):
         data = self.cleaned_data['text']

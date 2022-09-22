@@ -1,4 +1,3 @@
-from django.views.decorators.cache import cache_page
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -13,7 +12,6 @@ def get_page_paginator(request, posts):
     paginator = Paginator(posts, settings.POSTS_NUM)
     page_obj = paginator.get_page(page_namber)
     return page_obj
-
 
 
 def index(request):
@@ -117,7 +115,6 @@ def follow_index(request):
     posts = Post.objects.filter(author__following__user=request.user)
     page_obj = get_page_paginator(request, posts)
     context = {
-        
         'page_obj': page_obj,
     }
     return render(request, 'posts/follow.html', context)
@@ -130,8 +127,7 @@ def profile_follow(request, username):
     if author != request.user:
         Follow.objects.get_or_create(user=request.user, author=author)
     return redirect('posts:profile', author)
-     
-    
+
 
 @login_required
 def profile_unfollow(request, username):

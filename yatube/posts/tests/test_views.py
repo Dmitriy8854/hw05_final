@@ -1,7 +1,6 @@
 import shutil
 import tempfile
-from urllib import response
-from http import HTTPStatus
+
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.conf import settings
@@ -63,6 +62,7 @@ class PostPagesTests(TestCase):
             self.assertEqual(post.author, self.post.author)
             self.assertEqual(post.group.id, self.post.group.id)
             self.assertEqual(post.image, self.post.image)
+
 
 class PostTests(TestCase):
     @classmethod
@@ -186,9 +186,7 @@ class TestCache(TestCase):
             pub_date='31 июля 1854',
             author=cls.user,
             text='Тестовый текст',
-            
         )
-        
 
     def setUp(self):
         self.guest_client = Client()
@@ -207,12 +205,12 @@ class TestCache(TestCase):
         tri_step = self.authorized_client.get(reverse('posts:index'))
         self.assertNotEqual(one_step.content, tri_step.content)
 
+
 class TestFollow(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        
-      
+
     def setUp(self):
         self.follower_client = Client()
         self.following_client = Client()
@@ -220,36 +218,35 @@ class TestFollow(TestCase):
         self.user_following = User.objects.create_user(username='Автор')
         self.follower_client.force_login(self.user_follower)
         self.following_client.force_login(self.user_following)
-    #Авторизованный пользователь может подписываться на других пользователей
+
     def test_follow(self):
         follow_cont = Follow.objects.count()
-        self.follower_client.post(reverse('posts:profile_follow', kwargs={'username': self.user_following}))
+        self.follower_client.post(reverse(
+            'posts:profile_follow', kwargs={'username': self.user_following}))
         follow_cont1 = Follow.objects.count()
-        self.assertTrue(Follow.objects.filter(author=self.user_following, user=self.user_follower).exists())
-        self.assertEqual(follow_cont+1, follow_cont1)
-   
+        self.assertTrue(Follow.objects.filter(
+            author=self.user_following, user=self.user_follower).exists())
+        self.assertEqual(follow_cont + 1, follow_cont1)
 
     def test_unfollow(self):
-        
-        #Создаем подписку
-        self.follower_client.post(reverse('posts:profile_follow', kwargs={'username': self.user_following}))
-        #считаем
+        self.follower_client.post(reverse(
+            'posts:profile_follow', kwargs={'username': self.user_following}))
         follow_cont = Follow.objects.count()
-        #удаляем
-        self.follower_client.post(reverse('posts:profile_unfollow', kwargs={'username': self.user_following}))
-        #считаем
+        self.follower_client.post(reverse(
+            'posts:profile_unfollow', kwargs={'username': self.user_following}))
         follow_cont1 = Follow.objects.count()
-        self.assertFalse(Follow.objects.filter(author=self.user_following, user=self.user_follower).exists())
-        self.assertEqual(follow_cont-1, follow_cont1)
+        self.assertFalse(Follow.objects.filter(
+            author=self.user_following, user=self.user_follower).exists())
+        self.assertEqual(follow_cont - 1, follow_cont1)
 
     def test_visual_follow_in_page(self):
         post = Post.objects.create(
             pub_date='31 июля 1854',
             author=self.user_following,
             text='Тестовый текст',
-            
         )
-        Follow.objects.create(author=self.user_following, user=self.user_follower)
+        Follow.objects.create(
+            author=self.user_following, user=self.user_follower)
         response = self.follower_client.get(reverse('posts:follow_index'))
         post_list = response.context['page_obj'].object_list
         self.assertIn(post, post_list)
@@ -259,7 +256,6 @@ class TestFollow(TestCase):
             pub_date='31 июля 1854',
             author=self.user_following,
             text='Тестовый текст',
-            
         )
         response = self.follower_client.get(reverse('posts:follow_index'))
         post_list = response.context['page_obj'].object_list
@@ -284,7 +280,6 @@ class TestComment(TestCase):
             group=cls.group,
         )
 
-
     def setUp(self):
         self.guest_client = Client()
         self.authorized_client = Client()
@@ -292,7 +287,6 @@ class TestComment(TestCase):
         self.authorized_client.force_login(self.test_user)
         self.author = User.objects.create_user(username='Leo1')
         self.authorized_client_author.force_login(self.author)
-
 
     def test_comment_2(self):
         post = Post.objects.create(
@@ -309,9 +303,9 @@ class TestComment(TestCase):
             data=form_data,
             follow=True
         )
-        self.assertRedirects(response, (reverse('posts:post_detail', kwargs={'post_id': post.id})))
-        self.assertEqual(Comment.objects.count(), comments_count+1)
+        self.assertRedirects(response, (
+            reverse('posts:post_detail', kwargs={'post_id': post.id})))
+        self.assertEqual(Comment.objects.count(), comments_count + 1)
         self.assertTrue(Comment.objects.filter(
             text='Тестовый комментарий',
-            author=self.author
-            ).exists())
+            author=self.author).exists())
