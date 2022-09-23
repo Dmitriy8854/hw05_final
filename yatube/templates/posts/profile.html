@@ -6,6 +6,7 @@
 <div class="mb-5">
   <h2>Все посты пользователя {{ author }}</h2>
     <h3>Всего постов: {{ count_post }}</h3>
+    {% if request.user != author %}
     {% if following %}
     <a
       class="btn btn-lg btn-light"
@@ -20,6 +21,7 @@
       >
         Подписаться
       </a>
+   {% endif %}
    {% endif %}
   </div>
       {% for post in page_obj %}
