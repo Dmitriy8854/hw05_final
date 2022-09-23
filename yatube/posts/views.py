@@ -52,7 +52,6 @@ def profile(request, username):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    #posts_count = Post.objects.filter(author=post.author).count()
     posts_count = post.author.posts.count()
     form = CommentForm(request.POST or None)
     if form.is_valid():
