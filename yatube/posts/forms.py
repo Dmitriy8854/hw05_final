@@ -15,7 +15,7 @@ class PostForm(forms.ModelForm):
 
     def clean_text(self):
         data = self.cleaned_data['text']
-        if Post.text == '':
+        if data == '':
             raise forms.ValidationError(
                 'Поле, текст обязателен для заполнения!')
         return data
@@ -30,7 +30,7 @@ class CommentForm(forms.ModelForm):
 
     def clean_text(self):
         data = self.cleaned_data['text']
-        if Post.text == '':
+        if data == '':
             raise forms.ValidationError(
                 'Поле, текст обязателен для заполнения!')
         return data
